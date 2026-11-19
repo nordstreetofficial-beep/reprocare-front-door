@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Health Check: private guide</title>
+<style>
+:root{--bg:#f4f7f8;--card:#fff;--ink:#14202b;--mute:#5a6872;--line:#d5dee3;--acc:#1f6f78;--accfg:#fff;--bad:#b3261e;--badbg:#fde9e7;--warn:#7a4f00;--warnbg:#fff2d6;--ok:#17603a;--okbg:#e3f4ea;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f171c;--card:#18232a;--ink:#e6eef2;--mute:#9db0ba;--line:#2c3b44;--acc:#5cc0cb;--accfg:#08181b;--bad:#ff9b92;--badbg:#3a1a18;--warn:#f3c56b;--warnbg:#3a2c0d;--ok:#8fdcab;--okbg:#14301f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f171c;--card:#18232a;--ink:#e6eef2;--mute:#9db0ba;--line:#2c3b44;--acc:#5cc0cb;--accfg:#08181b;--bad:#ff9b92;--badbg:#3a1a18;--warn:#f3c56b;--warnbg:#3a2c0d;--ok:#8fdcab;--okbg:#14301f;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:640px;margin:0 auto;padding:16px 16px 48px}
+h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:600;line-height:1.2;margin:.2em 0 .4em}
+h1{font-size:1.7rem}h2{font-size:1.3rem}
+.sub{color:var(--mute);margin:0 0 16px}
+.hero{position:relative;overflow:hidden;border-radius:14px;padding:30px 20px 22px;margin:34px 0 12px;color:#fff;background:linear-gradient(135deg,#1f6f78,#0d3f4a)}
+.hero svg{position:absolute;right:-30px;bottom:-6px;width:96%;max-width:560px;opacity:.28;pointer-events:none;-webkit-mask-image:linear-gradient(to left,#000 45%,transparent);mask-image:linear-gradient(to left,#000 45%,transparent)}
+.hero>*:not(svg){position:relative}
+.hero h1{font-size:1.9rem;margin:0 0 6px}.hero p{margin:0 0 14px;max-width:30ch;font-size:1.05rem}
+.trust{display:flex;flex-wrap:wrap;gap:6px}.trust span{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:4px 11px;font-size:.84rem}
+.bar{display:flex;align-items:center;gap:10px;padding:10px 2px;padding-inline-end:110px;margin:0 0 6px;border-bottom:1px solid var(--line);font-size:.85rem;color:var(--mute)}
+.bar b{font-family:Georgia,serif;font-size:1.05rem;color:var(--ink)}
+.notice{background:var(--warnbg);color:var(--warn);border:1px solid var(--warn);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:.9rem}
+.bar i{display:inline-block;width:22px;height:22px;border-radius:6px;background:var(--acc);position:relative}
+.bar i:before,.bar i:after{content:"";position:absolute;background:var(--accfg);border-radius:1px}
+.bar i:before{left:9px;top:4px;width:4px;height:14px}.bar i:after{left:4px;top:9px;width:14px;height:4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:12px 0}
+.q{padding:12px 0;border-top:1px solid var(--line)}.q:first-child{border-top:0}
+.q p{margin:0 0 8px}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+button,.chip{font:inherit;cursor:pointer}
+.chip{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:6px 12px;min-height:36px}
+.chip.on{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
+.btn{background:var(--acc);color:var(--accfg);border:0;border-radius:8px;padding:11px 18px;min-height:44px;font-weight:600}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.exit{position:fixed;top:0;right:0;z-index:5;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px;background:transparent}
+.lang{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 0;padding-inline-end:110px}[dir=rtl] .exit{right:auto;left:0}[dir=rtl] .hero svg{right:auto;left:-30px;transform:scaleX(-1)}.exit button.on{background:var(--acc);color:var(--accfg);border-color:var(--acc)}.exit button{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:.85rem}
+.tag{display:inline-block;border-radius:6px;padding:2px 8px;font-size:.85rem;font-weight:600}
+.t-bad{background:var(--badbg);color:var(--bad)}.t-warn{background:var(--warnbg);color:var(--warn)}.t-ok{background:var(--okbg);color:var(--ok)}
+.note{font-size:.88rem;color:var(--mute)}
+ul{padding-inline-start:1.2em;margin:.4em 0}
+select,textarea{font:inherit;width:100%;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+textarea{min-height:150px}
+label.chk{display:flex;gap:8px;align-items:flex-start;margin:8px 0}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.85rem}td,th{border-bottom:1px solid var(--line);padding:5px 6px;text-align:left}
+button:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="exit"><button id="quit" aria-label="Quick exit: clears everything">Quick exit</button></div>
+<main id="app"></main>
+<script>
+const RED=[['e1','Sudden, severe pain in a testicle or the scrotum','E'],['e2','Severe pain, swelling or bruising after an injury to the groin or testicles','E'],['e3','A painful, swollen testicle together with fever or chills','E'],['e4','Unable to pass urine at all','E'],['e5','Testicular pain together with nausea or vomiting','E'],['e6','Rapid, painful swelling of the scrotum','E'],['u1','A new lump, hardness, or change in size or shape of a testicle','U'],['u2','Blood in your semen or urine','U'],['u3','Ongoing testicular or groin pain or heaviness','U'],['u4','Pain or burning when passing urine, or passing urine much more often','U']];
+const CORE=[['undesc','Born with an undescended testicle, or had surgery for it','History'],['torsion','Past testicular torsion (twisting)','History'],['surg','Past groin or testicle surgery (for example hernia or varicocele)','History'],['infect','Past infection of the testicle, epididymis or prostate, or a sexually transmitted infection','History'],['chemo','Past chemotherapy or radiation','History'],['ster','Use of testosterone, steroids or muscle-building supplements','Medicines and habits'],['smoke','Smoking or vaping','Medicines and habits'],['alc','Heavy alcohol use','Medicines and habits'],['heat','Regular exposure to high heat at work or by habit','Exposures'],['tox','Work with chemicals, radiation or other known toxins','Exposures'],['diab','Known diabetes or pre-diabetes','General health'],['bp','Known high blood pressure','General health'],['bmi','Weight above the healthy range','General health'],['ed','Ongoing difficulty with erections','Sexual function'],['ej','Ongoing difficulty with ejaculation','Sexual function']];
+const GOALS=[['check','I want to check my general reproductive health'],['future','I may want children in the future'],['trying','I am trying to have a child'],['concern','I have a concern or symptom'],['none','I would rather not say']];
+const OUT={urgent:'Urgent assessment',andro:'Andrology or urology referral',fert:'Fertility services (couple assessment)',pc:'Primary care assessment',self:'Self-care information'};
+const AGES=['18-24','25-29','30-34','35-39','40-44','45+'];
+const $=s=>document.querySelector(s);
+let S={step:'consent',a:{},c:{use:false,exp:false,anon:false}};
+
+function ev(a){
+ const y=k=>a[k]==='y',un=k=>a[k]==='u',tr=a.goal==='trying',pl=a.goal==='future',co=a.goal==='concern';
+ const E=RED.filter(r=>r[2]==='E'&&(y(r[0])||un(r[0])));
+ if(E.length)return{o:'urgent',lv:'emergency',r:E.map(r=>[r[1],'Go to emergency care now']),m:[]};
+ const m=CORE.filter(c=>!a[c[0]]||a[c[0]]==='u'||a[c[0]]==='p').map(c=>c[1]);
+ const U=RED.filter(r=>r[2]==='U'&&(y(r[0])||un(r[0])));
+ if(U.length)return{o:'urgent',lv:'days',r:U.map(r=>[r[1],'See a doctor within days']),m};
+ const A=[],F=[],P=[];
+ if(a.semen==='two'&&a.sflag==='y')A.push(['Two or more semen tests with a value outside the lab’s reference range','See an andrology or urology specialist']);
+ if(y('azoo'))A.push(['A semen test reported no sperm','See an andrology or urology specialist']);
+ if((y('undesc')||y('surg'))&&(tr||co))A.push(['Past undescended testicle or testicular surgery, and you are trying or have a concern','Specialist review']);
+ if(y('chemo')&&(tr||pl))A.push(['Past chemotherapy or radiation, and you are trying or may want children','Specialist review and fertility counselling']);
+ if((y('ed')||y('ej'))&&tr)A.push(['Ongoing sexual function difficulty while trying','Specialist review']);
+ if(tr&&a.dur==='gt12')F.push(['Trying for more than 12 months','Couple assessment at a fertility service, or start with primary care']);
+ const rf=[['ster','Steroid or testosterone use'],['heat','Regular heat exposure'],['tox','Toxin or radiation exposure'],['infect','Past infection'],['diab','Diabetes or pre-diabetes'],['bp','High blood pressure'],['bmi','Weight above the healthy range']].filter(x=>y(x[0]));
+ if(a.semen==='one'&&a.sflag==='y')P.push(['One semen test outside the reference range','Ask a clinician about repeating the test']);
+ rf.forEach(x=>P.push([x[1],'Discuss with a primary care doctor']));
+ if((y('ed')||y('ej'))&&!tr)P.push(['Ongoing sexual function difficulty','Discuss with a primary care doctor']);
+ if(tr&&a.dur==='6to12'&&rf.length)P.push(['Trying for 6 to 12 months with a risk factor','Primary care assessment']);
+ if(co)P.push(['You have a concern','A doctor can check it']);
+ if(A.length)return{o:'andro',r:A.concat(F,P),m};
+ if(F.length)return{o:'fert',r:F.concat(P),m};
+ if(P.length)return{o:'pc',r:P,m};
+ return{o:'self',r:[['No flags or risk factors reported','General information, and a re-check when planning a family']],m};
+}
+
+function opts(id,list,cur){return '<div class="opts">'+list.map(o=>`<button class="chip${cur===o[0]?' on':''}" data-q="${id}" data-v="${o[0]}">${o[1]}</button>`).join('')+'</div>'}
+const YN3=[['y','Yes'],['n','No'],['u','Not sure']],YN4=YN3.concat([['p','Prefer not to say']]);
+const FOOT='<p class="note">This is a screening tool, not a diagnosis. A doctor makes medical decisions. Prototype for demonstration: no real patient data. Clinician review pending.</p>';
+
+function view(){
+ const a=S.a,st=S.step;
+ if(st==='consent')return `<div class="hero">${SCENE}<h1>Health Check</h1><p>A private first step for men’s reproductive health.</p><div class="trust"><span>Private by design</span><span>Guideline-informed</span><span>A doctor makes the decisions</span></div></div>${NOTICE}
+ <div class="card"><h2>Before you start</h2><p>We ask about your health and habits to suggest a next step. We keep nothing by default: your answers stay in this browser tab and clear when you leave. We never use them for ads, and never share them with employers or insurers.</p>
+ ${[['use','Use my answers for this session (required)'],['exp','Let me export a summary I can show a doctor'],['anon','Allow anonymous counts to improve this tool']].map(x=>`<label class="chk"><input type="checkbox" data-c="${x[0]}" ${S.c[x[0]]?'checked':''}> ${x[1]}</label>`).join('')}
+ <div class="row"><button class="btn" id="go" ${S.c.use?'':'disabled style="opacity:.5"'}>Continue</button></div></div><div class="card"><h2 style="font-size:1.05rem">How it works</h2><ul><li>A safety check comes first.</li><li>Simple rules suggest a next step and show why.</li><li>You can share a summary with a doctor, only if you choose.</li><li>A doctor, not this tool, makes medical decisions.</li></ul></div><div class="card"><h2 style="font-size:1.05rem">Your privacy</h2><p class="note">This demo sends nothing to a server and saves nothing. Answers stay in your browser tab and clear when you leave. Please do not enter names or ID numbers.</p></div>${FOOT}`;
+ if(st==='red')return `<h2>First, a safety check</h2><p class="sub">Do any of these apply to you right now?</p><div class="card">${RED.map(r=>`<div class="q"><p>${r[1]}</p>${opts(r[0],YN3,a[r[0]])}</div>`).join('')}<div class="row"><button class="btn" data-go="goal">Continue</button></div></div>`;
+ if(st==='goal')return `<h2>What brings you here?</h2><div class="card"><div class="q">${opts('goal',GOALS,a.goal)}</div>
+ ${a.goal==='trying'?`<div class="q"><p>How long have you been trying?</p>${opts('dur',[['lt6','Under 6 months'],['6to12','6 to 12 months'],['gt12','Over 12 months'],['u','Not sure']],a.dur)}</div>`:''}
+ <div class="q"><p>Age band (optional)</p><select id="age"><option value="">Prefer not to say</option>${AGES.map(g=>`<option ${a.age===g?'selected':''}>${g}</option>`).join('')}</select></div>
+ <div class="row"><button class="btn" data-go="core">Continue</button></div></div>`;
+ if(st==='core'){let g='',h='';CORE.forEach(c=>{if(c[2]!==g){g=c[2];h+=`<h2 style="font-size:1.05rem;margin-top:14px">${g}</h2>`}h+=`<div class="q"><p>${c[1]}</p>${opts(c[0],YN4,a[c[0]])}</div>`});
+ return `<h2>A few questions</h2><p class="sub">Skip anything you prefer not to answer. We will tell you what we could not assess.</p><div class="card">${h}
+ <h2 style="font-size:1.05rem;margin-top:14px">Test results</h2><div class="q"><p>How many semen tests have you had?</p>${opts('semen',[['none','None'],['one','One'],['two','Two or more']],a.semen)}</div>
+ ${a.semen==='one'||a.semen==='two'?`<div class="q"><p>Did the lab mark any value below its reference range?</p>${opts('sflag',YN3,a.sflag)}</div><div class="q"><p>Was no sperm found?</p>${opts('azoo',YN3,a.azoo)}</div>`:''}
+ <div class="row"><button class="btn" data-go="result">See my result</button></div></div>`}
+ if(st==='result')return result();
+ if(st==='tests')return tests();
+ if(st==='quit')return '<h1>Page closed</h1><p>Nothing was saved.</p><button class="btn ghost" id="restart">Start again</button>';
+}
+
+function result(){
+ const r=ev(S.a),em=r.lv==='emergency',cls=r.o==='urgent'?'t-bad':r.o==='self'?'t-ok':'t-warn';
+ let nxt='';
+ if(em)nxt='<div class="card" style="border-color:var(--bad)"><h2>Go to emergency care now</h2><p>Call your local emergency number or go to the nearest emergency department. Do not wait for a fertility assessment.</p></div>';
+ else{
+  nxt=`<div class="card"><h2>What happens next</h2><div class="row" style="margin-top:0">
+  ${r.o!=='self'?'<button class="btn ghost" data-go="tele">Book a teleconsult (demo)</button>':''}
+  ${S.a.semen!=='two'&&r.o!=='self'?'<button class="btn ghost" data-go="semen">Semen test step</button>':''}
+  ${S.c.exp?'<button class="btn ghost" data-go="sum">Doctor summary</button>':''}</div><div id="sub"></div></div>`;
+  if(r.o==='self')nxt+='<div class="card"><h2>General information</h2><ul><li>Not smoking, moderate alcohol, regular activity, and managing weight and blood sugar are commonly advised for general health.</li><li>Re-check when you plan a family, or if anything changes.</li></ul></div>';
+ }
+ return `<h2>Your result</h2><div class="card"><span class="tag ${cls}">${OUT[r.o]}${r.lv==='days'?' (within days)':''}</span>
+ <h2 style="margin-top:12px;font-size:1.05rem">Why you got this</h2><ul>${r.r.map(x=>`<li><span>You told us:</span> <span>${x[0]}</span>. <span>We suggest:</span> <span>${x[1]}</span>.</li>`).join('')}</ul>
+ ${r.m.length?`<h2 style="font-size:1.05rem">What we could not assess</h2><ul class="note">${r.m.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}</div>${nxt}
+ <div class="row"><button class="btn ghost" data-go="goal">Change answers</button><button class="btn ghost" id="del">Delete everything</button><button class="btn ghost" data-go="tests">Test suite</button></div>${FOOT}`;
+}
+
+const CASES=[['No risk',{goal:'check'},'self'],['Steroid use',{goal:'check',ster:'y'},'pc'],['Trying over 12 months',{goal:'trying',dur:'gt12'},'fert'],['Sudden severe pain',{goal:'check',e1:'y'},'urgent'],['New testicular lump',{goal:'check',u1:'y'},'urgent'],['Two abnormal semen tests',{goal:'trying',semen:'two',sflag:'y'},'andro'],['No sperm found',{goal:'trying',semen:'one',azoo:'y'},'andro'],['Over 12 months plus two abnormal tests',{goal:'trying',dur:'gt12',semen:'two',sflag:'y'},'andro'],['Steroids, heat, trying 6 to 12 months',{goal:'trying',dur:'6to12',ster:'y',heat:'y'},'pc'],['Not sure about severe pain',{goal:'check',e1:'u'},'urgent'],['Concern only',{goal:'concern'},'pc'],['Erection difficulty, not trying',{goal:'check',ed:'y'},'pc'],['Chemotherapy, may want children',{goal:'future',chemo:'y'},'andro'],['Injury with severe pain and fever',{goal:'check',e2:'y',e3:'y'},'urgent'],['Single abnormal semen test',{goal:'check',semen:'one',sflag:'y'},'pc'],['Pain with vomiting',{goal:'check',e5:'y'},'urgent'],['Urinary symptoms',{goal:'check',u4:'y'},'urgent']];
+const SRC=[['UCI Fertility (Gil et al., 2012)','100 men, Spain','88 normal, 12 altered semen; CC BY 4.0'],['Dammam, Saudi Arabia','425 infertile men','47% abnormal semen parameters'],['Riyadh, Saudi Arabia','1,485 men','4.1% normal; 10% azoospermia'],['Hamad Medical, Qatar','13,892 infertile men','Semen quality lower in MENA patients'],['Abu Dhabi fertility centre','19,482 men, 32,664 samples','113 nationalities, 2011-2022'],['UAE National Health Survey 2024-25','Adults','Men smoking 13.7%, high BP 25.9%, overweight 66.7%']];
+function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function bench(){
+ const r=rng(7),p=x=>r()<x,N=5000,c={};let solo=0;
+ for(let i=0;i<N;i++){
+  const a={},g=r();a.goal=g<.5?'check':g<.7?'future':g<.9?'trying':'concern';
+  if(a.goal==='trying'){const d=r();a.dur=d<.5?'lt6':d<.75?'6to12':'gt12'}
+  [['smoke',.137],['bp',.259],['bmi',.667],['diab',.15],['ster',.03],['heat',.1],['tox',.05],['infect',.05],['ed',.08],['ej',.04],['e1',.005],['u1',.005]].forEach(x=>a[x[0]]=p(x[1])?'y':'n');
+  const t=r();a.semen=t<.8?'none':t<.92?'one':'two';if(a.semen!=='none'){a.sflag=p(.47)?'y':'n';a.azoo=p(.05)?'y':'n'}
+  const e=ev(a);c[e.o]=(c[e.o]||0)+1;if(e.o==='pc'&&e.r.length===1&&e.r[0][0]==='Weight above the healthy range')solo++
+ }
+ const rows=Object.keys(OUT).map(k=>`<tr><td>${OUT[k]}</td><td>${((c[k]||0)/N*100).toFixed(1)}%</td></tr>`).join('');
+ return `<h2 style="margin-top:20px">Real-data benchmark</h2><div class="card"><p class="note">Published studies this prototype is checked against. These are aggregate results; individual patient records are not public.</p><div class="scroll"><table><tr><th>Source</th><th>Sample</th><th>Finding</th></tr>${SRC.map(s=>`<tr><td>${s[0]}</td><td>${s[1]}</td><td>${s[2]}</td></tr>`).join('')}</table></div></div>
+ <div class="card"><h2 style="font-size:1.05rem">${N} simulated Gulf-style men</h2><p class="note">Risk factors use the UAE survey rates for smoking, high BP and weight. All other rates (diabetes 15%, steroids 3%, heat 10%, and so on) are my assumptions. Semen results use the Saudi clinic rate (47%), so this is a stress test, not a prevalence estimate.</p><table><tr><th>Outcome</th><th>Share</th></tr>${rows}</table><p><b>Primary care only because of weight:</b> ${(solo/N*100).toFixed(1)}% of all men</p></div>`}
+function tests(){
+ let ok=0,miss=0,diff=0;
+ const rows=CASES.map(c=>{const g=ev(c[1]).o,p=g===c[2];if(p)ok++;if(c[2]==='urgent'&&g!=='urgent')miss++;
+  AGES.forEach(b=>{if(ev(Object.assign({},c[1],{age:b})).o!==g)diff++});
+  return `<tr><td>${c[0]}</td><td>${OUT[c[2]]}</td><td>${OUT[g]}</td><td>${p?'Pass':'Fail'}</td></tr>`}).join('');
+ return `<h2>Test suite (simulated)</h2><p class="sub">${CASES.length} made-up cases. Expected outcomes were written before running and need clinician review.</p>
+ <div class="card"><p><b>Correct outcome:</b> ${ok} of ${CASES.length}<br><b>Red-flag misses:</b> ${miss}<br><b>Outcome changes across ${AGES.length} age bands:</b> ${diff} (same answers must give the same outcome)</p>
+ <div class="scroll"><table><tr><th>Case</th><th>Expected</th><th>Got</th><th></th></tr>${rows}</table></div></div>
+ ${bench()}<button class="btn ghost" data-go="result">Back to result</button>`;
+}
+
+function summary(){
+ const a=S.a,r=ev(a);
+ return `<label class="chk"><input type="checkbox" class="sf" value="o" checked> Outcome and reasons</label>
+ <label class="chk"><input type="checkbox" class="sf" value="h" checked> History, medicines and exposures I answered Yes to</label>
+ <label class="chk"><input type="checkbox" class="sf" value="s"> Semen test information</label>
+ <div class="row"><button class="btn" id="mk">Make summary</button></div><textarea id="sumtxt" readonly placeholder="Your summary appears here"></textarea>`;
+}
+function mkSummary(){
+ const a=S.a,r=ev(a),v=[...document.querySelectorAll('.sf:checked')].map(x=>x.value),L=['Health Check summary (screening, not a diagnosis)'];
+ if(v.includes('o')){L.push('Suggested next step: '+OUT[r.o]);r.r.forEach(x=>L.push('- '+x[0]))}
+ if(v.includes('h')){const y=CORE.filter(c=>a[c[0]]==='y').map(c=>c[1]);L.push('Answered Yes: '+(y.length?y.join('; '):'none'))}
+ if(v.includes('s'))L.push('Semen tests: '+({none:'none',one:'one',two:'two or more'}[a.semen]||'not given')+'; value outside lab range: '+(a.sflag||'not given')+'; no sperm found: '+(a.azoo||'not given'));
+ $('#sumtxt').value=L.join('\n');
+}
+
+const SCENE='<svg viewBox="0 0 600 260" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M200 70h70l14-30 18 64 14-34h84" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g fill="#fff"><rect x="30" y="90" width="170" height="170" rx="6"/><rect x="85" y="48" width="60" height="50" rx="4"/><circle cx="360" cy="112" r="23"/><rect x="322" y="142" width="76" height="118" rx="24"/><circle cx="474" cy="132" r="20" opacity=".8"/><rect x="442" y="158" width="64" height="102" rx="20" opacity=".8"/></g><g fill="#0d3f4a"><rect x="108" y="56" width="14" height="34"/><rect x="98" y="66" width="34" height="14"/><rect x="50" y="120" width="26" height="26"/><rect x="92" y="120" width="26" height="26"/><rect x="134" y="120" width="26" height="26"/><rect x="50" y="162" width="26" height="26"/><rect x="92" y="162" width="26" height="26"/><rect x="134" y="162" width="26" height="26"/><rect x="92" y="212" width="36" height="48"/></g><path d="M344 144q16 44 32 0" stroke="#0d3f4a" stroke-width="4" fill="none" stroke-linecap="round"/></svg>';
+const BAR='<div class="bar"><i></i><b>Health Check</b><span>Private. Guideline-informed.</span></div>';
+const NOTICE='<div class="notice"><b>Important:</b> if you have sudden or severe testicular pain, do not wait to finish this form. Get emergency care now or call your local emergency number.</div>';
+function langbar(){return '<div class="lang">'+[['ar','🇦🇪','AR'],['en','🇬🇧','EN'],['ms','🇲🇾','BM']].map(l=>`<button class="chip${LANG===l[0]?' on':''}" data-lang="${l[0]}">${l[1]} ${l[2]}</button>`).join('')+'</div>'}
+function paint(){$('#app').innerHTML=langbar()+(S.step==='consent'||S.step==='quit'?'':BAR+NOTICE)+view();window.scrollTo(0,0)}
+document.addEventListener('click',e=>{
+ const q=e.target.closest('[data-q]');
+ if(q){S.a[q.dataset.q]=q.dataset.v;q.parentNode.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c===q));if(['goal','semen'].includes(q.dataset.q)){const y=scrollY;paint();scrollTo(0,y)}return}
+ const g=e.target.closest('[data-go]');
+ if(g){const t=g.dataset.go;
+  if(t==='tele'){$('#sub').innerHTML='<p>Demo only: no booking is made.</p><div class="row"><button class="btn ghost">Today 6:00 pm</button><button class="btn ghost">Tomorrow 9:30 am</button><button class="btn ghost">Tomorrow 7:00 pm</button></div>';return}
+  if(t==='semen'){$('#sub').innerHTML='<ul><li>A semen analysis checks volume, sperm count, movement and shape.</li><li>Follow the lab’s own collection instructions.</li><li>One abnormal result is often repeated, so ask a clinician when.</li><li>This tool does not advise home testing.</li></ul>';return}
+  if(t==='sum'){$('#sub').innerHTML=summary();return}
+  S.step=t;paint();return}
+ if(e.target.id==='go'){S.step='red';paint()}
+ if(e.target.id==='del'){S={step:'consent',a:{},c:{use:false,exp:false,anon:false}};paint()}
+ if(e.target.id==='quit'){S={step:'quit',a:{},c:{use:false,exp:false,anon:false}};paint()}
+ if(e.target.id==='restart'){S.step='consent';paint()}
+ if(e.target.id==='mk')mkSummary();
+});
+let LANG='ar';
+const RMS=['Sakit teruk yang tiba-tiba pada testis atau skrotum','Sakit teruk, bengkak atau lebam selepas kecederaan di celah paha atau testis','Testis sakit dan bengkak disertai demam atau menggigil','Tidak dapat kencing langsung','Sakit testis disertai loya atau muntah','Skrotum bengkak dengan cepat dan sakit','Ketulan baharu, keras, atau perubahan saiz atau bentuk pada testis','Darah dalam air mani atau air kencing','Sakit atau rasa berat berterusan pada testis atau celah paha','Pedih semasa kencing, atau kerap kencing'];
+const CMS=['Dilahirkan dengan testis tidak turun, atau pernah dibedah untuknya','Pernah mengalami testis berpusing (torsion)','Pernah dibedah di celah paha atau testis (cth. hernia atau varikokel)','Pernah dijangkiti pada testis, epididimis atau prostat, atau jangkitan kelamin','Pernah menjalani kemoterapi atau radiasi','Menggunakan testosteron, steroid atau suplemen pembina otot','Merokok atau vape','Minum alkohol berlebihan','Kerap terdedah kepada haba tinggi di tempat kerja atau melalui tabiat','Bekerja dengan bahan kimia, radiasi atau toksin lain','Menghidap diabetes atau pra-diabetes','Menghidap tekanan darah tinggi','Berat badan melebihi julat sihat','Sukar mendapat ereksi secara berterusan','Sukar terpancut secara berterusan'];
+const GMS=['Saya ingin menyemak kesihatan reproduktif umum saya','Saya mungkin mahu anak pada masa depan','Saya sedang cuba mendapatkan anak','Saya ada kebimbangan atau gejala','Saya lebih suka tidak berkata'];
+const D={'A private first step for men’s reproductive health.':'Langkah pertama yang peribadi untuk kesihatan reproduktif lelaki.','Private by design':'Peribadi sejak asal','Guideline-informed':'Berpandukan garis panduan','A doctor makes the decisions':'Doktor membuat keputusan','Important:':'Penting:','if you have sudden or severe testicular pain, do not wait to finish this form. Get emergency care now or call your local emergency number.':'jika anda sakit testis yang tiba-tiba atau teruk, jangan tunggu untuk melengkapkan borang ini. Dapatkan rawatan kecemasan sekarang atau hubungi nombor kecemasan tempatan.','Before you start':'Sebelum anda mula','We ask about your health and habits to suggest a next step. We keep nothing by default: your answers stay in this browser tab and clear when you leave. We never use them for ads, and never share them with employers or insurers.':'Kami bertanya tentang kesihatan dan tabiat anda untuk mencadangkan langkah seterusnya. Kami tidak menyimpan apa-apa: jawapan anda kekal dalam tab pelayar ini dan dipadam apabila anda keluar. Tidak digunakan untuk iklan, dan tidak dikongsi dengan majikan atau syarikat insurans.','Use my answers for this session (required)':'Guna jawapan saya untuk sesi ini (wajib)','Let me export a summary I can show a doctor':'Benarkan saya eksport ringkasan untuk ditunjukkan kepada doktor','Allow anonymous counts to improve this tool':'Benarkan kiraan tanpa nama untuk menambah baik alat ini','Continue':'Teruskan','How it works':'Cara ia berfungsi','A safety check comes first.':'Semakan keselamatan dibuat dahulu.','Simple rules suggest a next step and show why.':'Peraturan mudah mencadangkan langkah seterusnya dan menerangkan sebabnya.','You can share a summary with a doctor, only if you choose.':'Anda boleh berkongsi ringkasan dengan doktor, hanya jika anda mahu.','A doctor, not this tool, makes medical decisions.':'Doktor, bukan alat ini, membuat keputusan perubatan.','Your privacy':'Privasi anda','This demo sends nothing to a server and saves nothing. Answers stay in your browser tab and clear when you leave. Please do not enter names or ID numbers.':'Demo ini tidak menghantar apa-apa ke pelayan dan tidak menyimpan apa-apa. Jawapan kekal dalam tab pelayar anda dan dipadam apabila anda keluar. Jangan masukkan nama atau nombor kad pengenalan.','This is a screening tool, not a diagnosis. A doctor makes medical decisions. Prototype for demonstration: no real patient data. Clinician review pending.':'Ini alat saringan, bukan diagnosis. Doktor membuat keputusan perubatan. Prototaip demonstrasi: tiada data pesakit sebenar. Semakan klinisian belum dibuat.','First, a safety check':'Mula-mula, semakan keselamatan','Do any of these apply to you right now?':'Adakah mana-mana ini berlaku pada anda sekarang?','What brings you here?':'Apa yang membawa anda ke sini?','How long have you been trying?':'Sudah berapa lama anda mencuba?','Under 6 months':'Kurang 6 bulan','6 to 12 months':'6 hingga 12 bulan','Over 12 months':'Lebih 12 bulan','Age band (optional)':'Julat umur (pilihan)','A few questions':'Beberapa soalan','Skip anything you prefer not to answer. We will tell you what we could not assess.':'Langkau apa yang anda tidak mahu jawab. Kami akan beritahu apa yang tidak dapat dinilai.','History':'Sejarah','Medicines and habits':'Ubat dan tabiat','Exposures':'Pendedahan','General health':'Kesihatan umum','Sexual function':'Fungsi seksual','Test results':'Keputusan ujian','How many semen tests have you had?':'Berapa kali anda menjalani ujian air mani?','None':'Tiada','One':'Sekali','Two or more':'Dua kali atau lebih','Did the lab mark any value below its reference range?':'Adakah makmal menanda sebarang nilai di bawah julat rujukan?','Was no sperm found?':'Adakah tiada sperma ditemui?','See my result':'Lihat keputusan saya','Yes':'Ya','No':'Tidak','Not sure':'Tidak pasti','Prefer not to say':'Lebih suka tidak berkata','Your result':'Keputusan anda','Urgent assessment':'Penilaian segera','Urgent assessment (within days)':'Penilaian segera (dalam beberapa hari)','Andrology or urology referral':'Rujukan andrologi atau urologi','Fertility services (couple assessment)':'Perkhidmatan kesuburan (penilaian pasangan)','Primary care assessment':'Penilaian di klinik primer','Self-care information':'Maklumat penjagaan kendiri','Why you got this':'Kenapa anda mendapat keputusan ini','You told us:':'Anda memberitahu kami:','We suggest:':'Kami mencadangkan:','What we could not assess':'Apa yang tidak dapat kami nilai','Go to emergency care now':'Pergi ke rawatan kecemasan sekarang','Call your local emergency number or go to the nearest emergency department. Do not wait for a fertility assessment.':'Hubungi nombor kecemasan tempatan atau pergi ke jabatan kecemasan terdekat. Jangan tunggu penilaian kesuburan.','What happens next':'Apa yang berlaku seterusnya','Book a teleconsult (demo)':'Tempah telekonsultasi (demo)','Semen test step':'Langkah ujian air mani','Doctor summary':'Ringkasan untuk doktor','General information':'Maklumat umum','Not smoking, moderate alcohol, regular activity, and managing weight and blood sugar are commonly advised for general health.':'Tidak merokok, alkohol sederhana, aktiviti tetap, serta mengawal berat badan dan gula darah lazimnya dinasihatkan untuk kesihatan umum.','Re-check when you plan a family, or if anything changes.':'Semak semula apabila merancang keluarga, atau jika ada perubahan.','Change answers':'Tukar jawapan','Delete everything':'Padam semua','Demo only: no booking is made.':'Demo sahaja: tiada tempahan dibuat.','Page closed':'Halaman ditutup','Nothing was saved.':'Tiada apa-apa disimpan.','Start again':'Mula semula','Two or more semen tests with a value outside the lab’s reference range':'Dua ujian air mani atau lebih dengan nilai di luar julat rujukan makmal','See an andrology or urology specialist':'Jumpa pakar andrologi atau urologi','A semen test reported no sperm':'Ujian air mani melaporkan tiada sperma','Past undescended testicle or testicular surgery, and you are trying or have a concern':'Pernah testis tidak turun atau dibedah, dan anda sedang mencuba atau ada kebimbangan','Specialist review':'Semakan pakar','Past chemotherapy or radiation, and you are trying or may want children':'Pernah kemoterapi atau radiasi, dan anda sedang mencuba atau mungkin mahu anak','Specialist review and fertility counselling':'Semakan pakar dan kaunseling kesuburan','Ongoing sexual function difficulty while trying':'Masalah fungsi seksual berterusan semasa mencuba','Trying for more than 12 months':'Mencuba lebih 12 bulan','Couple assessment at a fertility service, or start with primary care':'Penilaian pasangan di perkhidmatan kesuburan, atau mulakan di klinik primer','Steroid or testosterone use':'Penggunaan steroid atau testosteron','Regular heat exposure':'Kerap terdedah kepada haba','Toxin or radiation exposure':'Terdedah kepada toksin atau radiasi','Past infection':'Pernah dijangkiti','Diabetes or pre-diabetes':'Diabetes atau pra-diabetes','High blood pressure':'Tekanan darah tinggi','Weight above the healthy range':'Berat badan melebihi julat sihat','Discuss with a primary care doctor':'Bincang dengan doktor klinik primer','One semen test outside the reference range':'Satu ujian air mani di luar julat rujukan','Ask a clinician about repeating the test':'Tanya klinisian tentang mengulang ujian','Ongoing sexual function difficulty':'Masalah fungsi seksual berterusan','Trying for 6 to 12 months with a risk factor':'Mencuba 6 hingga 12 bulan dengan faktor risiko','You have a concern':'Anda ada kebimbangan','A doctor can check it':'Doktor boleh memeriksanya','No flags or risk factors reported':'Tiada tanda bahaya atau faktor risiko dilaporkan','General information, and a re-check when planning a family':'Maklumat umum, dan semakan semula apabila merancang keluarga','See a doctor within days':'Jumpa doktor dalam beberapa hari','Go to emergency care now ':'Pergi ke rawatan kecemasan sekarang'};
+(typeof RED!=='undefined'?RED:[]).forEach((r,i)=>D[r[1]]=RMS[i]);CORE.forEach((c,i)=>D[c[1]]=CMS[i]);GOALS.forEach((g,i)=>D[g[1]]=GMS[i]);
+const AR=['خطوة أولى خاصة لصحة الرجل الإنجابية.','خصوصية مدمجة في التصميم','مستند إلى الإرشادات الطبية','الطبيب هو من يتخذ القرارات','مهم:','إذا كنت تعاني من ألم مفاجئ أو شديد في الخصية، فلا تنتظر إكمال هذا النموذج. اطلب الرعاية الطارئة الآن أو اتصل برقم الطوارئ المحلي.','قبل أن تبدأ','نسألك عن صحتك وعاداتك لنقترح الخطوة التالية. لا نحتفظ بأي شيء: تبقى إجاباتك في علامة التبويب هذه وتُمسح عند مغادرتك. لا نستخدمها للإعلانات ولا نشاركها مع أصحاب العمل أو شركات التأمين.','استخدم إجاباتي في هذه الجلسة (مطلوب)','اسمح لي بتصدير ملخص يمكنني عرضه على الطبيب','اسمح بإحصاءات مجهولة الهوية لتحسين هذه الأداة','متابعة','كيف تعمل','يبدأ الأمر بفحص السلامة.','قواعد بسيطة تقترح الخطوة التالية وتوضح السبب.','يمكنك مشاركة ملخص مع الطبيب إذا اخترت ذلك فقط.','الطبيب، وليس هذه الأداة، هو من يتخذ القرارات الطبية.','خصوصيتك','لا ترسل هذه النسخة التجريبية أي شيء إلى خادم ولا تحفظ أي شيء. تبقى الإجابات في علامة التبويب وتُمسح عند المغادرة. يُرجى عدم إدخال الأسماء أو أرقام الهوية.','هذه أداة فرز أولي وليست تشخيصاً. الطبيب هو من يتخذ القرارات الطبية. نموذج تجريبي للعرض: لا توجد بيانات مرضى حقيقية. مراجعة الطبيب لم تتم بعد.','أولاً، فحص السلامة','هل ينطبق عليك أي مما يلي الآن؟','ما الذي أتى بك إلى هنا؟','منذ متى وأنت تحاول الإنجاب؟','أقل من 6 أشهر','من 6 إلى 12 شهراً','أكثر من 12 شهراً','الفئة العمرية (اختياري)','بعض الأسئلة','تخطَّ أي سؤال لا تفضّل الإجابة عنه. سنخبرك بما لم نتمكن من تقييمه.','التاريخ المرضي','الأدوية والعادات','التعرضات','الصحة العامة','الوظيفة الجنسية','نتائج الفحوص','كم مرة أجريت تحليل السائل المنوي؟','لا شيء','مرة واحدة','مرتان أو أكثر','هل وضع المختبر علامة على أي قيمة أقل من المعدل المرجعي؟','هل لم يُعثر على حيوانات منوية؟','اعرض نتيجتي','نعم','لا','غير متأكد','أفضّل عدم الإجابة','نتيجتك','تقييم عاجل','تقييم عاجل (خلال أيام)','إحالة إلى طب الذكورة أو المسالك البولية','خدمات الخصوبة (تقييم الزوجين)','تقييم في الرعاية الأولية','معلومات للرعاية الذاتية','لماذا حصلت على هذه النتيجة','أخبرتنا:','نقترح:','ما لم نتمكن من تقييمه','اذهب إلى الطوارئ الآن','اتصل برقم الطوارئ المحلي أو توجه إلى أقرب قسم طوارئ. لا تنتظر تقييم الخصوبة.','ما الخطوة التالية','احجز استشارة عن بُعد (تجريبي)','خطوة تحليل السائل المنوي','ملخص للطبيب','معلومات عامة','يُنصح عادةً للصحة العامة بعدم التدخين، والاعتدال في الكحول، والنشاط المنتظم، وضبط الوزن وسكر الدم.','أعد الفحص عند التخطيط لتكوين أسرة أو إذا تغيّر شيء.','غيّر إجاباتي','احذف كل شيء','عرض تجريبي فقط: لم يتم أي حجز.','أُغلقت الصفحة','لم يتم حفظ أي شيء.','ابدأ من جديد','تحليلان أو أكثر للسائل المنوي بقيمة خارج المعدل المرجعي للمختبر','راجع أخصائي طب الذكورة أو المسالك البولية','أفاد تحليل السائل المنوي بعدم وجود حيوانات منوية','خصية غير نازلة أو جراحة في الخصية سابقاً، وأنت تحاول الإنجاب أو لديك قلق','مراجعة أخصائي','علاج كيميائي أو إشعاعي سابق، وأنت تحاول الإنجاب أو قد ترغب بأطفال','مراجعة أخصائي واستشارة في الخصوبة','صعوبة مستمرة في الوظيفة الجنسية أثناء محاولة الإنجاب','محاولة الإنجاب لأكثر من 12 شهراً','تقييم الزوجين في خدمة خصوبة، أو ابدأ بالرعاية الأولية','استخدام الستيرويدات أو التستوستيرون','التعرض المنتظم للحرارة','التعرض للسموم أو الإشعاع','عدوى سابقة','السكري أو مقدمات السكري','ارتفاع ضغط الدم','وزن أعلى من المعدل الصحي','ناقش الأمر مع طبيب الرعاية الأولية','تحليل واحد للسائل المنوي خارج المعدل المرجعي','اسأل الطبيب عن إعادة التحليل','صعوبة مستمرة في الوظيفة الجنسية','محاولة الإنجاب من 6 إلى 12 شهراً مع وجود عامل خطر','لديك قلق','يمكن للطبيب فحصه','لم يُبلّغ عن علامات خطر أو عوامل خطورة','معلومات عامة، وإعادة الفحص عند التخطيط لتكوين أسرة','راجع الطبيب خلال أيام','اذهب إلى الطوارئ الآن',
+'ألم شديد ومفاجئ في إحدى الخصيتين أو في كيس الصفن','ألم شديد أو تورم أو كدمات بعد إصابة في الأربية أو الخصيتين','خصية مؤلمة ومتورمة مع حمى أو قشعريرة','عدم القدرة على التبول إطلاقاً','ألم في الخصية مع غثيان أو قيء','تورم سريع ومؤلم في كيس الصفن','كتلة جديدة أو صلابة أو تغير في حجم أو شكل الخصية','دم في السائل المنوي أو البول','ألم أو ثقل مستمر في الخصية أو الأربية','ألم أو حرقة عند التبول، أو التبول بشكل أكثر تكراراً',
+'وُلدت بخصية غير نازلة، أو أجريت لها جراحة','التواء سابق في الخصية','جراحة سابقة في الأربية أو الخصية (مثل الفتق أو دوالي الخصية)','عدوى سابقة في الخصية أو البربخ أو البروستاتا، أو عدوى منقولة جنسياً','علاج كيميائي أو إشعاعي سابق','استخدام التستوستيرون أو الستيرويدات أو مكملات بناء العضلات','التدخين أو السجائر الإلكترونية','الإفراط في شرب الكحول','التعرض المنتظم لحرارة عالية في العمل أو بحكم العادة','العمل مع مواد كيميائية أو إشعاع أو سموم أخرى','الإصابة بالسكري أو مقدمات السكري','الإصابة بارتفاع ضغط الدم','وزن أعلى من المعدل الصحي','صعوبة مستمرة في الانتصاب','صعوبة مستمرة في القذف',
+'أريد فحص صحتي الإنجابية العامة','قد أرغب في إنجاب أطفال مستقبلاً','أحاول إنجاب طفل','لديّ قلق أو عَرَض','أفضّل عدم الإجابة'];
+const OV={0:'خطوتك الأولى، وبكل خصوصية، لصحة الرجال الإنجابية.',1:'خصوصيتك مضمونة',2:'مبني على إرشادات طبية',3:'الدكتور هو اللي يقرر',5:'إذا عندك ألم قوي ومفاجئ في الخصية، لا تنتظر لين تخلّص هالنموذج. روح الطوارئ الحين أو اتصل برقم الطوارئ.',6:'قبل لا تبدأ',7:'نسألك عن صحتك وعاداتك عشان نقترح عليك الخطوة الجاية. ما نحتفظ بأي شي: إجاباتك تبقى في هالصفحة وتنمسح أول ما تطلع. ما نستخدمها للإعلانات، وما نشاركها مع الشغل أو شركات التأمين.',8:'استخدم إجاباتي في هالجلسة (مطلوب)',9:'خلني أصدّر ملخص أقدر أوريه للدكتور',10:'اسمح بإحصائيات بدون أسماء عشان نحسّن هالأداة',11:'كمّل',12:'شلون تشتغل',13:'نبدأ بفحص السلامة أول.',14:'قواعد بسيطة تقترح الخطوة الجاية وتوضح السبب.',15:'تقدر تشارك ملخص مع الدكتور، بس إذا أنت تبي.',16:'الدكتور، مب هالأداة، هو اللي يقرر في الأمور الطبية.',18:'هالنسخة التجريبية ما ترسل شي لأي سيرفر وما تحفظ شي. الإجابات تبقى في الصفحة وتنمسح لما تطلع. لا تدخل اسمك أو رقم هويتك.',19:'هالأداة للفرز المبدئي مب للتشخيص. الدكتور هو اللي يقرر في الأمور الطبية. نسخة تجريبية للعرض: ما فيها بيانات مرضى حقيقية، وما تمت مراجعتها من دكتور للحين.',20:'أول شي، فحص السلامة',21:'أي من هذي ينطبق عليك الحين؟',22:'شو اللي جابك هني؟',23:'من متى وإنت تحاول تجيب عيال؟',24:'أقل من 6 شهور',25:'من 6 إلى 12 شهر',26:'أكثر من 12 شهر',28:'كم سؤال بسيط',29:'إذا في سؤال ما تبي تجاوب عنه، عادي تخطّاه. بنقول لك شو اللي ما قدرنا نقيّمه.',35:'نتايج الفحوصات',36:'كم مرة سويت تحليل السائل المنوي؟',40:'المختبر حط علامة على أي قيمة أقل من المعدل الطبيعي؟',41:'المختبر ما لقى حيوانات منوية؟',42:'شوف نتيجتي',45:'مب متأكد',46:'أفضّل ما أجاوب',54:'ليش طلعت لك هالنتيجة',55:'إنت قلت لنا:',57:'اللي ما قدرنا نقيّمه',58:'روح الطوارئ الحين',59:'اتصل برقم الطوارئ أو روح أقرب طوارئ. لا تنتظر تقييم الخصوبة.',60:'شو الخطوة الجاية',61:'احجز استشارة عن بُعد (تجريبي)',63:'ملخص للدكتور',66:'أعد الفحص إذا تخطط لعائلة، أو إذا تغيّر شي.',67:'غيّر إجاباتي',68:'امسح كل شي',69:'تجربة فقط: ما انحجز شي.',70:'انسدّت الصفحة',71:'ما انحفظ أي شي.',100:'روح الطوارئ الحين',101:'ألم قوي ومفاجئ في الخصية أو كيس الصفن',102:'ألم قوي أو ورم أو كدمات بعد ضربة في الخصية أو منطقة الفخذ',103:'الخصية متورمة ومؤلمة مع حرارة أو رجفة',104:'ما تقدر تتبول أبداً',105:'ألم في الخصية مع غثيان أو استفراغ',106:'ورم سريع ومؤلم في كيس الصفن',107:'كتلة جديدة أو قساوة أو تغيّر في حجم أو شكل الخصية',108:'دم في السائل المنوي أو البول',109:'ألم أو ثقل مستمر في الخصية أو منطقة الفخذ',110:'حرقان وقت التبول، أو تتبول أكثر من العادة',111:'انولدت وخصيتك ما نزلت، أو سويت لها عملية',112:'صار لك التواء في الخصية قبل',113:'سويت عملية في منطقة الفخذ أو الخصية (مثل الفتق أو دوالي الخصية)',114:'صار لك التهاب في الخصية أو البربخ أو البروستاتا، أو التهاب منقول جنسياً',115:'خذت علاج كيماوي أو إشعاعي قبل',116:'تستخدم تستوستيرون أو ستيرويدات أو مكملات لبناء العضلات',117:'تدخن أو تستخدم السجائر الإلكترونية',118:'تشرب كحول بكثرة',119:'تتعرض كثير للحرارة العالية في الشغل أو بحكم عادتك',120:'تشتغل مع مواد كيماوية أو إشعاع أو سموم',121:'عندك سكري أو مقدمات السكري',122:'عندك ضغط دم مرتفع',123:'وزنك أعلى من المعدل الصحي',124:'عندك صعوبة مستمرة في الانتصاب',125:'عندك صعوبة مستمرة في القذف',126:'أبي أطمّن على صحتي الإنجابية',127:'يمكن أبي عيال في المستقبل',128:'أحاول أجيب طفل',129:'عندي قلق أو عرض',130:'أفضّل ما أجاوب'};Object.keys(OV).forEach(i=>AR[i]=OV[i]);
+const K=Object.keys(D).slice(0,101).concat(RED.map(r=>r[1]),CORE.map(c=>c[1]),GOALS.map(g=>g[1])),DA={};if(AR.length===K.length)K.forEach((k,i)=>DA[k]=AR[i]);
+function loc(){document.documentElement.lang=LANG==='ar'?'ar-AE':LANG;document.documentElement.dir=LANG==='ar'?'rtl':'ltr';const qb=document.getElementById('quit');if(qb)qb.textContent={ar:'خروج سريع',ms:'Keluar pantas',en:'Quick exit'}[LANG];const M=LANG==='ms'?D:LANG==='ar'?DA:null;if(!M)return;const w=document.createTreeWalker($('#app'),NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){const k=n.nodeValue.trim(),v=M[k];if(v)n.nodeValue=n.nodeValue.replace(k,()=>v)}}
+new MutationObserver(loc).observe($('#app'),{childList:true,subtree:true});
+document.addEventListener('click',e=>{const l=e.target.closest('[data-lang]');if(l){LANG=l.dataset.lang;document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('on',b===l));paint()}});
+document.addEventListener('change',e=>{
+ if(e.target.dataset.c){S.c[e.target.dataset.c]=e.target.checked;if(e.target.dataset.c==='use')paint()}
+ if(e.target.id==='age')S.a.age=e.target.value;
+});
+paint();
+</script>
+</body>
+</html>
